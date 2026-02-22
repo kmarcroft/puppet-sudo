@@ -1,6 +1,13 @@
 pkg/
 Gemfile.lock
-.rspec_system
 *.swp
 .bundle/
+vendor/
 spec/fixtures/
+.vagrant/
+.yardoc/
+doc/
+log/
+.idea/
+.vscode/
+*.iml

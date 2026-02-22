@@ -1,10 +1,10 @@
 # puppet-sudo
 
-Allow restricted root access for specified users. The name of the defined
-type must consist of only letters, numbers and underscores and should be
-unique. If the name has incorrect characters the defined type will fail.
-Sudoers entries realised with the `sudo::sudoers` defined type will be
-stored in `"/etc/sudoers.d/[typename]"`.
+Manage sudo and individual sudoers entries via `/etc/sudoers.d/`.
+
+The name of each `sudo::sudoers` resource must consist of only letters,
+numbers and underscores and should be unique. Dots in resource names are
+automatically replaced with underscores.
 
 ## Fork Notice
 
@@ -20,114 +20,90 @@ This fork (3.0.0+) modernises the module for Puppet 8.x / OpenVox 8.x compatibil
 - Puppet 8.x or OpenVox 8.x
 - puppetlabs/stdlib >= 9.0.0
 
-This module expects that your OS/Distribution supports /etc/sudoers.d,
-which is true for all modern Linux distributions. If this is not the case,
-you can overwrite the default sudoers file with your own using the
-`sudoers_file` parameter of the sudo class, and add the line:
+### Supported Operating Systems
 
-    #include /etc/sudoers.d
+- RedHat / CentOS / OracleLinux / Rocky / AlmaLinux 8, 9, 10
+- Debian 11, 12, 13
+- Ubuntu 22.04, 24.04
 
-## Parameters for class sudo
+## Class: `sudo`
 
-### sudoers
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `sudoers` | `Hash` | `{}` | Hash of sudoers entries, created via `sudo::sudoers`. |
+| `manage_sudoersd` | `Boolean` | `false` | Purge unmanaged files from `/etc/sudoers.d/`. |
+| `manage_package` | `Boolean` | `true` | Whether to manage the `sudo` package. |
+| `sudoers_file` | `String` | `''` | A `puppet:///` source to install as `/etc/sudoers`. |
 
-Hash of sudoers entries, which will be created via sudo::sudoers.
+## Defined Type: `sudo::sudoers`
 
-### manage\_sudoersd
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `ensure` | `Enum['present','absent']` | `'present'` | Whether the entry should exist. |
+| `users` | `Optional[Variant[String, Array[String]]]` | `undef` | Users allowed to run commands. Cannot combine with `group`. |
+| `group` | `Optional[String]` | `undef` | Group allowed to run commands. Cannot combine with `users`. |
+| `hosts` | `Variant[String, Array[String]]` | `'ALL'` | Hosts the commands can be executed on. |
+| `cmnds` | `Variant[String, Array[String]]` | `'ALL'` | Commands the user/group can run. |
+| `runas` | `Variant[String, Array[String]]` | `['root']` | User(s) the commands may be run as. |
+| `tags` | `Variant[String, Array[String]]` | `[]` | Tags: `NOPASSWD`, `PASSWD`, `NOEXEC`, `EXEC`, `SETENV`, `NOSETENV`, `LOG_INPUT`, `NOLOG_INPUT`, `LOG_OUTPUT`, `NOLOG_OUTPUT`. |
+| `defaults` | `Variant[String, Array[String]]` | `[]` | Override compiled-in sudo defaults for these commands. |
+| `comment` | `Optional[String]` | `undef` | Comment to include in the sudoers file. |
 
-Boolean - should puppet clean /etc/sudoers.d/ of untracked files?
+## Examples
 
-### sudoers\_file
+### Puppet manifest
 
-Override the /etc/sudoers file with the file specified by this parameter.
-
-## Parameters for type sudo::sudoers
-
-### ensure
-
-Controls the existence of the sudoers entry. Set this attribute to
-present to ensure the sudoers entry exists. Set it to absent to
-delete any computer records with this name Valid values are present,
-absent.
-
-### users
-
-Array of users that are allowed to execute the command(s).
-
-### group
-
-Group that is allowed to execute the command(s). Cannot be combined with 'users'.
-
-### hosts
-
-Array of hosts that the command(s) can be executed on. Denying hosts using a bang/exclamation point may also be used.
-
-### cmnds
-
-List of commands that the user can run.
-
-### runas
-
-The user that the command may be run as.
-
-### cmnds
-
-The commands which the user is allowed to run.
-
-### tags
-
-A command may have zero or more tags associated with it.  There are
-eight possible tag values, NOPASSWD, PASSWD, NOEXEC, EXEC, SETENV,
-NOSETENV, LOG_INPUT, NOLOG_INPUT, LOG_OUTPUT and NOLOG_OUTPUT.
-
-### defaults
-
-Override some of the compiled in default values for sudo.
-
-## Example
-
-A sudoers entry can be defined within a class or node definition:
-
-    sudo::sudoers { 'worlddomination':
-      ensure   => 'present',
-      comment  => 'World domination.',
-      users    => ['pinky', 'brain'],
-      hosts    => ['foo.lab', 'bar.lab'],
-      runas    => ['root'],
-      cmnds    => ['ALL'],
-      tags     => ['NOPASSWD'],
-      defaults => [ 'env_keep += "SSH_AUTH_SOCK"' ]
-    }
-
-or via an ENC:
-
-    ---
-      classes:
-        sudo:
-          sudoers:
-            worlddomination:
-              ensure: present
-              comment: "World Domination."
-              users:
-                - pinky
-                - brain
-              hosts:
-                - foo.lab
-                - bar.lab
-              runas:
-                - root
-              cmnds:
-                - ALL
-              tags:
-                - NOPASSWD
-              defaults:
-                - 'env_keep += "SSH_AUTH_SOCK"'
-
-## Run syntax, lint and unit tests
-
+```puppet
+sudo::sudoers { 'worlddomination':
+  ensure   => 'present',
+  comment  => 'World domination.',
+  users    => ['pinky', 'brain'],
+  hosts    => ['foo.lab', 'bar.lab'],
+  runas    => ['root'],
+  cmnds    => ['ALL'],
+  tags     => ['NOPASSWD'],
+  defaults => ['env_keep += "SSH_AUTH_SOCK"'],
+}
 ```
+
+### Hiera / ENC
+
+```yaml
+classes:
+  sudo:
+    sudoers:
+      worlddomination:
+        ensure: present
+        comment: "World Domination."
+        users:
+          - pinky
+          - brain
+        hosts:
+          - foo.lab
+          - bar.lab
+        runas:
+          - root
+        cmnds:
+          - ALL
+        tags:
+          - NOPASSWD
+        defaults:
+          - 'env_keep += "SSH_AUTH_SOCK"'
+```
+
+## Development
+
+### Run syntax, lint and unit tests
+
+```sh
+bundle install
 bundle exec rake test
 ```
+
+### CI
+
+This module uses [GitHub Actions](.github/workflows/ci.yml) for automated
+lint, syntax, unit tests, and a smoke test using OpenVox 8.
 
 ## Contributors
 

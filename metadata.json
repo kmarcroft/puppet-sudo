@@ -1,12 +1,12 @@
 {
   "name": "puppet-sudo",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "author": "Kristian Marcroft",
   "license": "Apache-2.0",
   "summary": "Manage sudoers",
-  "source": "https://github.com/krimaxug/puppet-sudo",
-  "project_page": "https://github.com/krimaxug/puppet-sudo",
-  "issues_url": "https://github.com/krimaxug/puppet-sudo/issues",
+  "source": "https://github.com/kmarcroft/puppet-sudo",
+  "project_page": "https://github.com/kmarcroft/puppet-sudo",
+  "issues_url": "https://github.com/kmarcroft/puppet-sudo/issues",
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",

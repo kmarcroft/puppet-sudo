@@ -2,8 +2,8 @@ require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'puppet-syntax/tasks/puppet-syntax'
 
-# These two gems aren't always present, for instance
-# on Travis with --without development
+# These gems aren't always present, for instance
+# in CI with --without development
 begin
   require 'puppet_blacksmith/rake_tasks'
 rescue LoadError

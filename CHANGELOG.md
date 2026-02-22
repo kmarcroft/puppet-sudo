@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.1.0] - 2026-02-22
+
+### Changed
+
+- Rewrote README with parameter tables, supported OS list, fenced code blocks, and CI section
+- Removed duplicate `cmnds` parameter documentation and added missing `manage_package` and `comment` docs
+
+### Removed
+
+- Removed obsolete beaker acceptance tests, nodesets, and `spec_helper_acceptance.rb`
+- Removed obsolete `.gemfile` (ancient Puppet 3 era leftover)
+- Removed `serverspec` / `system_tests` group from Gemfile
+- Removed `.rspec_system` from `.gitignore` (beaker artifact)
+- Cleaned up `tests/init.pp` boilerplate and dead link
+- Updated Rakefile Travis comment
+
+### Added
+
+- Added `vendor/`, IDE, and doc paths to `.gitignore`
+
 ## [3.0.2] - 2026-02-22
 
 ### Fixed

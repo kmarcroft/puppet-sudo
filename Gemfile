@@ -15,7 +15,3 @@ group :development do
   gem "puppet-blacksmith"
   gem "guard-rake"
 end
-
-group :system_tests do
-  gem 'serverspec', :require => false
-end
