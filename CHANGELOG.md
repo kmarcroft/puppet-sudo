@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.1] - 2026-02-22
+
+### Fixed
+
+- Removed obsolete beaker acceptance test section from README
+- Removed duplicate contributors line in README
+
 ## [3.0.0] - 2026-02-22
 
 Forked from [arnoudj/puppet-sudo](https://github.com/arnoudj/puppet-sudo) by
