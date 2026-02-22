@@ -55,7 +55,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install OpenVox 8
         run: |
-          curl -sS https://apt.voxpupuli.org/openvox8-release-$(lsb_release -cs).deb -o /tmp/openvox8-release.deb
+          . /etc/os-release
+          curl -sS "https://apt.voxpupuli.org/openvox8-release-${ID}${VERSION_ID}.deb" -o /tmp/openvox8-release.deb
           sudo dpkg -i /tmp/openvox8-release.deb
           sudo apt-get update -qq
           sudo apt-get install -y openvox-agent
