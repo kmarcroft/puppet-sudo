@@ -1,54 +1,49 @@
-# == Class: sudo
+# @summary Manage sudo and sudoers entries.
 #
 # Allow restricted root access for specified users. The sudo class is
 # specifically created to be used from an ENC.
 #
-# === Parameters
+# @param sudoers
+#   Hash of sudoers entries which will be created via sudo::sudoers.
 #
-# [*sudoers*]
-#   Hash of sudoers which will be created via sudo::sudoers.
+# @param manage_sudoersd
+#   Should puppet clean /etc/sudoers.d/ of untracked files?
 #
-# [*manage_sudoersd*]
-#   Boolean - should puppet clean /etc/sudoers.d/ of untracked files?
+# @param manage_package
+#   Whether to manage the sudo package.
 #
-# [*sudoers_file*]
-#   File that should be installed as /etc/sudoers
+# @param sudoers_file
+#   Puppet file source to install as /etc/sudoers.
 #
-# === Examples
-#
-# $sudoers = {
-#   'worlddomination' => {
-#     ensure  => 'present',
-#     comment => 'World domination.',
-#     users   => ['pinky', 'brain'],
-#     runas   => ['root'],
-#     cmnds   => ['/bin/bash'],
-#     tags    => ['NOPASSWD'],
+# @example Basic usage
+#   class { 'sudo':
+#     sudoers => {
+#       'worlddomination' => {
+#         ensure  => 'present',
+#         comment => 'World domination.',
+#         users   => ['pinky', 'brain'],
+#         runas   => ['root'],
+#         cmnds   => ['/bin/bash'],
+#         tags    => ['NOPASSWD'],
+#       },
+#     },
 #   }
-# }
-#
-# class { 'sudo': sudoers => $sudoers }
-#
-# === Authors
-#
-# Arnoud de Jonge <arnoud@de-jonge.org>
-#
-# === Copyright
-#
-# Copyright 2015 Arnoud de Jonge
 #
 class sudo (
-  $sudoers         = {},
-  $manage_sudoersd = false,
-  $manage_package  = true,
-  $sudoers_file    = ''
+  Hash             $sudoers         = {},
+  Boolean          $manage_sudoersd = false,
+  Boolean          $manage_package  = true,
+  String           $sudoers_file    = '',
 ) {
-
-  create_resources('sudo::sudoers', $sudoers)
+  $sudoers.each |String $title, Hash $params| {
+    sudo::sudoers { $title:
+      * => $params,
+    }
+  }
 
   if $manage_package {
     package { 'sudo':
-      ensure  => latest
+      ensure => installed,
     }
   }
 
@@ -71,5 +66,4 @@ class sudo (
       source => $sudoers_file,
     }
   }
-
 }

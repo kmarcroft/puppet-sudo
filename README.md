@@ -1,6 +1,4 @@
-# arnoudj/puppet-sudo
-
-[![Build Status](https://travis-ci.org/arnoudj/puppet-sudo.png?branch=master)](https://travis-ci.org/arnoudj/puppet-sudo)
+# puppet-sudo
 
 Allow restricted root access for specified users. The name of the defined
 type must consist of only letters, numbers and underscores and should be
@@ -8,11 +6,24 @@ unique. If the name has incorrect characters the defined type will fail.
 Sudoers entries realised with the `sudo::sudoers` defined type will be
 stored in `"/etc/sudoers.d/[typename]"`.
 
+## Fork Notice
+
+This module is a fork of [arnoudj/puppet-sudo](https://github.com/arnoudj/puppet-sudo),
+originally created by **Arnoud de Jonge**. All credit for the original design
+and implementation goes to Arnoud and the original
+[contributors](https://github.com/arnoudj/puppet-sudo/graphs/contributors).
+
+This fork (3.0.0+) modernises the module for Puppet 8.x / OpenVox 8.x compatibility.
+
+## Requirements
+
+- Puppet 8.x or OpenVox 8.x
+- puppetlabs/stdlib >= 9.0.0
+
 This module expects that your OS/Distribution supports /etc/sudoers.d,
-which is true for Ubuntu 10.04 and up and RedHat 6 and up. If this is not
-the case for you, then you can overwrite the default sudoers file with
-your own using the sudoers\_file parameter of the sudo class. And add the
-line:
+which is true for all modern Linux distributions. If this is not the case,
+you can overwrite the default sudoers file with your own using the
+`sudoers_file` parameter of the sudo class, and add the line:
 
     #include /etc/sudoers.d
 
@@ -125,5 +136,8 @@ bundle exec rspec spec/acceptance/
 ```
 
 ## Contributors
+
+This module was originally written by [Arnoud de Jonge](https://github.com/arnoudj).
+Thanks to all [original contributors](https://github.com/arnoudj/puppet-sudo/graphs/contributors).
 
 Thanks to [all contributors](https://github.com/arnoudj/puppet-sudo/graphs/contributors).

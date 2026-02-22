@@ -1,62 +1,77 @@
 {
-  "name": "arnoudj-sudo",
-  "version": "1.3.0",
-  "author": "Arnoud de Jonge",
+  "name": "puppet-sudo",
+  "version": "3.0.0",
+  "author": "Kristian Marcroft",
   "license": "Apache-2.0",
   "summary": "Manage sudoers",
-  "source": "https://github.com/arnoudj/puppet-sudo",
-  "project_page": "https://github.com/arnoudj/puppet-sudo",
-  "issues_url": "https://github.com/arnoudj/puppet-sudo",
+  "source": "https://github.com/krimaxug/puppet-sudo",
+  "project_page": "https://github.com/krimaxug/puppet-sudo",
+  "issues_url": "https://github.com/krimaxug/puppet-sudo/issues",
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "5",
-        "6",
-        "7"
+        "8",
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "5",
-        "6",
-        "7"
+        "8",
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "8",
+        "9",
+        "10"
       ]
     },
     {
-      "operatingsystem": "Scientific",
+      "operatingsystem": "Rocky",
       "operatingsystemrelease": [
-        "5",
-        "6",
-        "7"
+        "8",
+        "9",
+        "10"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
+      "operatingsystemrelease": [
+        "8",
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "6",
-        "7"
+        "11",
+        "12",
+        "13"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "10.04",
-        "12.04",
-        "14.04"
+        "22.04",
+        "24.04"
       ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 8.0.0 < 9.0.0"
     }
   ],
   "tags": ["sudo", "security"],
   "dependencies": [
-    { "name": "puppetlabs/stdlib", "version_requirement": ">=3.2.0" }
+    { "name": "puppetlabs/stdlib", "version_requirement": ">= 9.0.0 < 10.0.0" }
   ]
 }

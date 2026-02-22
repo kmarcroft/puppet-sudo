@@ -1,75 +1,58 @@
-# == Define: sudo
+# @summary Create a sudoers entry in /etc/sudoers.d/.
 #
 # Allow restricted root access for specified users. The name of the defined
 # type must consist of only letters, numbers and underscores. If the name
 # has incorrect characters the defined type will fail.
 #
-# === Parameters
+# @param ensure
+#   Controls the existence of the sudoers entry. Valid values: present, absent.
 #
-# [*ensure*]
-#   Controls the existence of the sudoers entry. Set this attribute to
-#   present to ensure the sudoers entry exists. Set it to absent to
-#   delete any computer records with this name Valid values are present,
-#   absent.
-#
-# [*users*]
+# @param users
 #   Array of users that are allowed to execute the command(s).
 #
-# [*group*]
+# @param group
 #   Group that can run the listed commands. Cannot be combined with users.
 #
-# [*hosts*]
-# Array of hosts that the command(s) can be executed on. Denying hosts using a bang/exclamation point may also be used.
+# @param hosts
+#   Array of hosts that the command(s) can be executed on.
 #
-# [*cmnds*]
+# @param cmnds
 #   List of commands that the user can run.
 #
-# [*runas*]
-#   The user that the command may be run as.
+# @param comment
+#   Optional comment to include in the sudoers file.
 #
-# [*cmnds*]
-#   The commands which the user is allowed to run.
+# @param runas
+#   The user(s) that the command may be run as.
 #
-# [*tags*]
-#   A command may have zero or more tags associated with it.  There are
-#   eight possible tag values, NOPASSWD, PASSWD, NOEXEC, EXEC, SETENV,
-#   NOSETENV, LOG_INPUT, NOLOG_INPUT, LOG_OUTPUT and NOLOG_OUTPUT.
+# @param tags
+#   Tags associated with the commands (e.g. NOPASSWD, NOEXEC).
 #
-# [*defaults*]
+# @param defaults
 #   Override some of the compiled in default values for sudo.
 #
-# === Examples
-#
-# sudo::sudoers { 'worlddomination':
-#   ensure   => 'present',
-#   comment  => 'World domination.',
-#   users    => ['pinky', 'brain'],
-#   runas    => ['root'],
-#   cmnds    => ['/bin/bash'],
-#   tags     => ['NOPASSWD'],
-#   defaults => [ 'env_keep += "SSH_AUTH_SOCK"' ]
-# }
-#
-# === Authors
-#
-# Arnoud de Jonge <arnoud@de-jonge.org>
-#
-# === Copyright
-#
-# Copyright 2015 Arnoud de Jonge
+# @example Basic usage
+#   sudo::sudoers { 'worlddomination':
+#     ensure   => 'present',
+#     comment  => 'World domination.',
+#     users    => ['pinky', 'brain'],
+#     runas    => ['root'],
+#     cmnds    => ['/bin/bash'],
+#     tags     => ['NOPASSWD'],
+#     defaults => ['env_keep += "SSH_AUTH_SOCK"'],
+#   }
 #
 define sudo::sudoers (
-  $users    = undef,
-  $group    = undef,
-  $hosts    = 'ALL',
-  $cmnds    = 'ALL',
-  $comment  = undef,
-  $ensure   = 'present',
-  $runas    = ['root'],
-  $tags     = [],
-  $defaults = [],
+  Optional[Variant[String, Array[String]]] $users    = undef,
+  Optional[String]                         $group    = undef,
+  Variant[String, Array[String]]           $hosts    = 'ALL',
+  Variant[String, Array[String]]           $cmnds    = 'ALL',
+  Optional[String]                         $comment  = undef,
+  Enum['present', 'absent']               $ensure   = 'present',
+  Variant[String, Array[String]]           $runas    = ['root'],
+  Variant[String, Array[String]]           $tags     = [],
+  Variant[String, Array[String]]           $defaults = [],
 ) {
-
   # filename as per the manual or aliases as per the sudoer spec must not
   # contain dots.
   # As having dots in a username is legit, let's fudge
@@ -77,25 +60,30 @@ define sudo::sudoers (
   $sudoers_user_file = "/etc/sudoers.d/${sane_name}"
 
   if $sane_name !~ /^[A-Za-z][A-Za-z0-9_]*$/ {
-    fail "Will not create sudoers file \"${sudoers_user_file}\" (for user \"${name}\") should consist of letters numbers or underscores."
+    fail("Will not create sudoers file \"${sudoers_user_file}\" (for user \"${name}\") should consist of letters numbers or underscores.")
   }
 
   if $users != undef and $group != undef {
-    fail 'You cannot define both a list of users and a group. Choose one.'
+    fail('You cannot define both a list of users and a group. Choose one.')
   }
 
   if $ensure == 'present' {
     file { $sudoers_user_file:
-      content => template('sudo/sudoers.erb'),
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0440',
-    }
-    if versioncmp($::puppetversion, '3.5') >= 0 {
-      File[$sudoers_user_file] { validate_cmd => '/usr/sbin/visudo -c -f %' }
-    }
-    else {
-      validate_cmd(template('sudo/sudoers.erb'), '/usr/sbin/visudo -c -f', 'Visudo failed to validate sudoers content')
+      content      => epp('sudo/sudoers.epp', {
+          'sane_name' => $sane_name,
+          'comment'   => $comment,
+          'users'     => $users,
+          'group'     => $group,
+          'hosts'     => $hosts,
+          'runas'     => $runas,
+          'cmnds'     => $cmnds,
+          'tags'      => $tags,
+          'defaults'  => $defaults,
+      }),
+      owner        => 'root',
+      group        => 'root',
+      mode         => '0440',
+      validate_cmd => '/usr/sbin/visudo -c -f %',
     }
   }
   else {

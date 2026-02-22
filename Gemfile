@@ -1,24 +1,21 @@
-source "http://rubygems.org"
+source "https://rubygems.org"
 
 group :test do
   gem "rake"
-  gem "puppet", ENV['PUPPET_VERSION'] || '~> 3.6.1'
-  gem "puppet-lint"
-  gem "rspec", "~> 3.1.0"
-  gem "rspec-puppet"
-  gem "puppet-syntax"
-  gem "puppetlabs_spec_helper"
+  gem "puppet", ENV['PUPPET_VERSION'] || '~> 8.0'
+  gem "puppet-lint", '~> 4.0'
+  gem "rspec", '~> 3.0'
+  gem "rspec-puppet", '~> 4.0'
+  gem "puppet-syntax", '~> 4.0'
+  gem "puppetlabs_spec_helper", '~> 7.0'
+  gem "facterdb"
 end
 
 group :development do
-  gem "travis"
-  gem "travis-lint"
-  gem "vagrant-wrapper"
   gem "puppet-blacksmith"
   gem "guard-rake"
 end
 
 group :system_tests do
-  gem 'beaker-rspec', :require => false
   gem 'serverspec', :require => false
 end
