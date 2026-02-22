@@ -1,6 +1,6 @@
 {
   "name": "puppet-sudo",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "author": "Kristian Marcroft",
   "license": "Apache-2.0",
   "summary": "Manage sudoers",

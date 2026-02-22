@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.2] - 2026-02-22
+
+### Fixed
+
+- Fixed CI smoke test: correct OpenVox apt repo URL (apt.voxpupuli.org)
+- Fixed CI smoke test: use OS version instead of codename for deb filename
+- Fixed CI smoke test: use correct binary path (/opt/puppetlabs/bin/puppet)
+- Fixed CI smoke test: symlink module directory to match module name
+
 ## [3.0.1] - 2026-02-22
 
 ### Fixed

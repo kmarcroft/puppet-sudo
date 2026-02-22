@@ -47,3 +47,21 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
       - run: bundle exec rake spec
+
+  smoke:
+    name: Smoke Test (openvox apply --noop)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install OpenVox 8
+        run: |
+          . /etc/os-release
+          curl -sS "https://apt.voxpupuli.org/openvox8-release-${ID}${VERSION_ID}.deb" -o /tmp/openvox8-release.deb
+          sudo dpkg -i /tmp/openvox8-release.deb
+          sudo apt-get update -qq
+          sudo apt-get install -y openvox-agent
+      - name: Run smoke test
+        run: |
+          export PATH="/opt/puppetlabs/bin:$PATH"
+          ln -s "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/../sudo"
+          puppet apply --noop --modulepath="$GITHUB_WORKSPACE/.." tests/init.pp
