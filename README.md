@@ -129,15 +129,7 @@ or via an ENC:
 bundle exec rake test
 ```
 
-## Run [beaker](https://github.com/puppetlabs/beaker) acceptance tests
-
-```
-bundle exec rspec spec/acceptance/
-```
-
 ## Contributors
 
 This module was originally written by [Arnoud de Jonge](https://github.com/arnoudj).
 Thanks to all [original contributors](https://github.com/arnoudj/puppet-sudo/graphs/contributors).
-
-Thanks to [all contributors](https://github.com/arnoudj/puppet-sudo/graphs/contributors).
