@@ -78,7 +78,7 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
       - name: Build module
-        run: bundle exec rake build
+        run: bundle exec rake module:build
       - name: Upload package
         uses: actions/upload-artifact@v4
         with:
