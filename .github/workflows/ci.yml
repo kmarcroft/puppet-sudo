@@ -3,12 +3,13 @@ name: CI
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
     branches: [main]
 
 jobs:
-  lint:
-    name: Puppet Lint
+  validate:
+    name: PDK Validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,21 +17,18 @@ jobs:
         with:
           ruby-version: '3.2'
           bundler-cache: true
-      - run: bundle exec rake lint
-
-  syntax:
-    name: Puppet Syntax
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.2'
-          bundler-cache: true
-      - run: bundle exec rake syntax
+      - name: Metadata validation
+        run: bundle exec rake metadata_lint
+      - name: Puppet syntax
+        run: bundle exec rake syntax
+      - name: Puppet lint
+        run: bundle exec rake lint
+      - name: Ruby style (rubocop)
+        run: bundle exec rake rubocop
 
   unit:
     name: Unit Tests (Ruby ${{ matrix.ruby }} / Puppet ${{ matrix.puppet }})
+    needs: validate
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -39,17 +37,19 @@ jobs:
           - ruby: '3.2'
             puppet: '~> 8.0'
     env:
-      PUPPET_VERSION: ${{ matrix.puppet }}
+      PUPPET_GEM_VERSION: ${{ matrix.puppet }}
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - run: bundle exec rake spec
+      - name: Run unit tests
+        run: bundle exec rake spec
 
   smoke:
     name: Smoke Test (openvox apply --noop)
+    needs: validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -65,3 +65,22 @@ jobs:
           export PATH="/opt/puppetlabs/bin:$PATH"
           ln -s "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/../sudo"
           puppet apply --noop --modulepath="$GITHUB_WORKSPACE/.." tests/init.pp
+
+  build:
+    name: Build Module Package
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [unit, smoke]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+      - name: Build module
+        run: bundle exec rake build
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: puppet-module-pkg
+          path: pkg/*.tar.gz

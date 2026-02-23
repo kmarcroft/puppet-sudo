@@ -1,12 +1,18 @@
 {
   "name": "puppet-sudo",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "author": "Kristian Marcroft",
-  "license": "Apache-2.0",
   "summary": "Manage sudoers",
+  "license": "Apache-2.0",
   "source": "https://github.com/kmarcroft/puppet-sudo",
   "project_page": "https://github.com/kmarcroft/puppet-sudo",
   "issues_url": "https://github.com/kmarcroft/puppet-sudo/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 9.0.0 < 10.0.0"
+    }
+  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
@@ -70,8 +76,11 @@
       "version_requirement": ">= 8.0.0 < 9.0.0"
     }
   ],
-  "tags": ["sudo", "security"],
-  "dependencies": [
-    { "name": "puppetlabs/stdlib", "version_requirement": ">= 9.0.0 < 10.0.0" }
-  ]
+  "tags": [
+    "sudo",
+    "security"
+  ],
+  "pdk-version": "3.6.1",
+  "template-url": "pdk-default#3.6.1",
+  "template-ref": "tags/3.6.1-0-gb9426e5"
 }

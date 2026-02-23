@@ -25,7 +25,10 @@ describe 'sudo::sudoers', type: :define do
     it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{^User_Alias\s*WORLD_DOMINATION_USERS\s=\spinky,\sbrain$}) }
     it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{^Runas_Alias\s*WORLD_DOMINATION_RUNAS\s=\sanimaniacs$}) }
     it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{^Cmnd_Alias\s*WORLD_DOMINATION_CMNDS\s=\s/bin/bash$}) }
-    it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{^WORLD_DOMINATION_USERS\sWORLD_DOMINATION_HOSTS\s=\s\(WORLD_DOMINATION_RUNAS\)\sLOG_INPUT:\sLOG_OUTPUT:\sWORLD_DOMINATION_CMNDS$}) }
+    it {
+      is_expected.to contain_file('/etc/sudoers.d/world_domination')
+        .with_content(%r{^WORLD_DOMINATION_USERS\sWORLD_DOMINATION_HOSTS\s=\s\(WORLD_DOMINATION_RUNAS\)\sLOG_INPUT:\sLOG_OUTPUT:\sWORLD_DOMINATION_CMNDS$})
+    }
     it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{Defaults!WORLD_DOMINATION_CMNDS env_keep \+= "SSH_AUTH_SOCK"}) }
   end
 
@@ -44,7 +47,10 @@ describe 'sudo::sudoers', type: :define do
     it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{^# Today\swe're\sgoing\sto\stake\sover\sthe\sworld$}) }
     it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{^Runas_Alias\s*WORLD_DOMINATION_RUNAS\s=\sanimaniacs$}) }
     it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{^Cmnd_Alias\s*WORLD_DOMINATION_CMNDS\s=\s/bin/bash$}) }
-    it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{%lab\sWORLD_DOMINATION_HOSTS\s=\s\(WORLD_DOMINATION_RUNAS\)\sLOG_INPUT:\sLOG_OUTPUT:\sWORLD_DOMINATION_CMNDS$}) }
+    it {
+      is_expected.to contain_file('/etc/sudoers.d/world_domination')
+        .with_content(%r{%lab\sWORLD_DOMINATION_HOSTS\s=\s\(WORLD_DOMINATION_RUNAS\)\sLOG_INPUT:\sLOG_OUTPUT:\sWORLD_DOMINATION_CMNDS$})
+    }
     it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{Defaults!WORLD_DOMINATION_CMNDS env_keep \+= "SSH_AUTH_SOCK"}) }
   end
 
@@ -62,7 +68,10 @@ describe 'sudo::sudoers', type: :define do
     it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{^User_Alias\s*WORLD_DOMINATION_USERS\s=\sriton$}) }
     it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{^Runas_Alias\s*WORLD_DOMINATION_RUNAS\s=\sroot$}) }
     it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{^Cmnd_Alias\s*WORLD_DOMINATION_CMNDS\s=\s/bin/bash$}) }
-    it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{^WORLD_DOMINATION_USERS\sWORLD_DOMINATION_HOSTS\s=\s\(WORLD_DOMINATION_RUNAS\)\sNOPASSWD:\sWORLD_DOMINATION_CMNDS$}) }
+    it {
+      is_expected.to contain_file('/etc/sudoers.d/world_domination')
+        .with_content(%r{^WORLD_DOMINATION_USERS\sWORLD_DOMINATION_HOSTS\s=\s\(WORLD_DOMINATION_RUNAS\)\sNOPASSWD:\sWORLD_DOMINATION_CMNDS$})
+    }
     it { is_expected.to contain_file('/etc/sudoers.d/world_domination').with_content(%r{Defaults!WORLD_DOMINATION_CMNDS env_keep \+= "KRB5CCNAME"}) }
   end
 
