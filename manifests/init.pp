@@ -30,10 +30,10 @@
 #   }
 #
 class sudo (
-  Hash             $sudoers         = {},
-  Boolean          $manage_sudoersd = false,
-  Boolean          $manage_package  = true,
-  String           $sudoers_file    = '',
+  Hash              $sudoers         = {},
+  Boolean           $manage_sudoersd = false,
+  Boolean           $manage_package  = true,
+  Optional[String]  $sudoers_file    = undef,
 ) {
   $sudoers.each |String $title, Hash $params| {
     sudo::sudoers { $title:
@@ -57,7 +57,7 @@ class sudo (
     force   => $manage_sudoersd,
   }
 
-  if $sudoers_file =~ /^puppet:\/\// {
+  if $sudoers_file and $sudoers_file =~ /^puppet:\/\// {
     file { '/etc/sudoers':
       ensure => file,
       owner  => 'root',
