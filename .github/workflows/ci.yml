@@ -7,9 +7,6 @@ on:
   pull_request:
     branches: [main]
 
-permissions:
-  contents: write
-
 jobs:
   validate:
     name: PDK Validate
@@ -55,6 +52,8 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: unit
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1

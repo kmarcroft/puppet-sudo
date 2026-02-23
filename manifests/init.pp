@@ -57,6 +57,12 @@ class sudo (
     force   => $manage_sudoersd,
   }
 
+  if $manage_package {
+    Package['sudo'] -> File['/etc/sudoers.d']
+  }
+
+  File['/etc/sudoers.d'] -> Sudo::Sudoers <| |>
+
   if $sudoers_file and $sudoers_file =~ /^puppet:\/\// {
     file { '/etc/sudoers':
       ensure => file,

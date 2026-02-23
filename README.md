@@ -66,29 +66,27 @@ sudo::sudoers { 'worlddomination':
 }
 ```
 
-### Hiera / ENC
+### Hiera
 
 ```yaml
-classes:
-  sudo:
-    sudoers:
-      worlddomination:
-        ensure: present
-        comment: "World Domination."
-        users:
-          - pinky
-          - brain
-        hosts:
-          - foo.lab
-          - bar.lab
-        runas:
-          - root
-        cmnds:
-          - ALL
-        tags:
-          - NOPASSWD
-        defaults:
-          - 'env_keep += "SSH_AUTH_SOCK"'
+sudo::sudoers:
+  worlddomination:
+    ensure: present
+    comment: "World Domination."
+    users:
+      - pinky
+      - brain
+    hosts:
+      - foo.lab
+      - bar.lab
+    runas:
+      - root
+    cmnds:
+      - ALL
+    tags:
+      - NOPASSWD
+    defaults:
+      - 'env_keep += "SSH_AUTH_SOCK"'
 ```
 
 ## Development

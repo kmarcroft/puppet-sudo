@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.3.0] - 2026-02-23
+
+### Changed
+
+- Added resource ordering: `Package['sudo']` -> `File['/etc/sudoers.d']` -> `Sudo::Sudoers` resources
+- Scoped CI `contents: write` permission to the build job only (least-privilege)
+- Updated Hiera example in README to use standard automatic parameter lookup
+
+### Removed
+
+- Removed obsolete `tests/init.pp` smoke test file
+- Removed smoke test job from CI workflow
+
 ## [3.2.1] - 2026-02-23
 
 ### Changed
