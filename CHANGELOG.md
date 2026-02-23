@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.0] - 2026-02-23
+
+### Changed
+
+- Converted module to PDK 3.6.1 template structure
+- Updated Gemfile, Rakefile, and spec_helper.rb to PDK defaults
+- Changed `sudoers_file` parameter from `String` (empty default) to `Optional[String]` (undef default)
+- Expanded `.gitignore` to PDK standard
+- Updated CI workflow: consolidated validation, added metadata_lint and rubocop checks
+- Added build job to CI for packaging on version tags
+
+### Added
+
+- PDK configuration files (`.pdkignore`, `.rubocop.yml`, `.puppet-lint.rc`, `.rspec`, etc.)
+- Hiera module data layer (`hiera.yaml`, `data/common.yaml`)
+- `spec/default_facts.yml` for default test facts
+
 ## [3.1.0] - 2026-02-22
 
 ### Changed
